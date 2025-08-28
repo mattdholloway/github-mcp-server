@@ -96,14 +96,10 @@ func DefaultToolsetGroup(readOnly bool, getClient GetClientFn, getGQLClient GetG
 		)
 	codeSecurity := toolsets.NewToolset("code_security", "Code security related tools, such as GitHub Code Scanning").
 		AddReadTools(
-			toolsets.NewServerTool(GetCodeScanningAlert(getClient, t)),
-			toolsets.NewServerTool(ListCodeScanningAlerts(getClient, t)),
 			toolsets.NewServerTool(ManageCodeScanningAlerts(getClient, t)),
 		)
 	secretProtection := toolsets.NewToolset("secret_protection", "Secret protection related tools, such as GitHub Secret Scanning").
 		AddReadTools(
-			toolsets.NewServerTool(GetSecretScanningAlert(getClient, t)),
-			toolsets.NewServerTool(ListSecretScanningAlerts(getClient, t)),
 			toolsets.NewServerTool(ManageSecretScanningAlerts(getClient, t)),
 		)
 	dependabot := toolsets.NewToolset("dependabot", "Dependabot tools").
@@ -171,12 +167,7 @@ func DefaultToolsetGroup(readOnly bool, getClient GetClientFn, getGQLClient GetG
 		)
 
 	gists := toolsets.NewToolset("gists", "GitHub Gist related tools").
-		AddReadTools(
-			toolsets.NewServerTool(ListGists(getClient, t)),
-		).
 		AddWriteTools(
-			toolsets.NewServerTool(CreateGist(getClient, t)),
-			toolsets.NewServerTool(UpdateGist(getClient, t)),
 			toolsets.NewServerTool(ManageGist(getClient, t)),
 		)
 
