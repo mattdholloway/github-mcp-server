@@ -64,4 +64,26 @@ func RegisterUIResources(s *mcp.Server) {
 			}, nil
 		},
 	)
+
+	// Register the compose_ui UI resource
+	s.AddResource(
+		&mcp.Resource{
+			URI:         ComposeUIResourceURI,
+			Name:        "compose_ui",
+			Description: "MCP App UI for dynamically composed forms",
+			MIMEType:    "text/html",
+		},
+		func(_ context.Context, _ *mcp.ReadResourceRequest) (*mcp.ReadResourceResult, error) {
+			html := MustGetUIAsset("compose.html")
+			return &mcp.ReadResourceResult{
+				Contents: []*mcp.ResourceContents{
+					{
+						URI:      ComposeUIResourceURI,
+						MIMEType: "text/html",
+						Text:     html,
+					},
+				},
+			}, nil
+		},
+	)
 }

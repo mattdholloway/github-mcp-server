@@ -668,6 +668,11 @@ The following sets of tools are available:
 
 <summary><picture><source media="(prefers-color-scheme: dark)" srcset="pkg/octicons/icons/person-dark.png"><source media="(prefers-color-scheme: light)" srcset="pkg/octicons/icons/person-light.png"><img src="pkg/octicons/icons/person-light.png" width="20" height="20" alt="person"></picture> Context</summary>
 
+- **compose_ui** - Compose Dynamic UI
+  - `components`: Array of component definitions for a single-stage UI (object[], optional)
+  - `stages`: Array of stage definitions for multi-stage flows (object[], optional)
+  - `title`: Title displayed at the top of the UI (string, required)
+
 - **get_me** - Get my user profile
   - No parameters required
 
@@ -802,17 +807,6 @@ The following sets of tools are available:
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
-- **create_issue_ui** - Create issue form
-  - **Required OAuth Scopes**: `repo`
-  - `assignees`: Pre-select assignees by username. Use list_assignees to get valid usernames for the repository. (string[], optional)
-  - `body`: Pre-fill the issue body content (supports GitHub Flavored Markdown) (string, optional)
-  - `labels`: Pre-select labels by name. Use list_label to get valid label names for the repository. (string[], optional)
-  - `milestone`: Pre-select milestone by number. Use list_milestones to get valid milestone numbers for the repository. (number, optional)
-  - `owner`: Repository owner (user or organization) (string, required)
-  - `repo`: Repository name (string, required)
-  - `title`: Pre-fill the issue title (string, optional)
-  - `type`: Pre-select issue type by name. Use list_issue_types to get valid types for the organization. (string, optional)
-
 - **get_label** - Get a specific label from a repository.
   - **Required OAuth Scopes**: `repo`
   - `name`: Label name. (string, required)
@@ -849,6 +843,7 @@ The following sets of tools are available:
   - `milestone`: Milestone number (number, optional)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
+  - `show_ui`: If true, show an interactive form for the user to fill in issue details. If false or omitted, create/update the issue directly with the provided parameters. Use show_ui when you want user input or when not all fields are specified. (boolean, optional)
   - `state`: New state (string, optional)
   - `state_reason`: Reason for the state change. Ignored unless state is changed. (string, optional)
   - `title`: Issue title (string, optional)

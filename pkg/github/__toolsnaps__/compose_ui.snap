@@ -1,0 +1,43 @@
+{
+  "_meta": {
+    "ui": {
+      "resourceUri": "ui://github-mcp-server/compose",
+      "visibility": [
+        "model",
+        "app"
+      ]
+    }
+  },
+  "annotations": {
+    "readOnlyHint": true,
+    "title": "Compose Dynamic UI"
+  },
+  "description": "Compose a dynamic UI from primitives. Use this to create custom forms \nthat combine multiple GitHub entities (issues, PRs, projects, repos, users, etc.).\n\n## Component Types\n\n### Form Inputs\n- text: Single-line text input (id, label, placeholder, defaultValue, required)\n- textarea: Multi-line text input (id, label, placeholder, rows, required)\n- select: Single-select dropdown (id, label, options: [{value, label}], defaultValue)\n- checkbox: Boolean toggle (id, label, defaultChecked)\n\n### GitHub Pickers (all require id, label)\n- repo_picker: Repository search and selection\n- issue_picker: Issue search (owner, repo required)\n- pr_picker: Pull request selection (owner, repo, state: open/closed/all)\n- user_picker: User/assignee search (owner, repo for scoped search)\n- label_picker: Label multi-select (owner, repo required)\n- milestone_picker: Milestone selection (owner, repo required)\n- project_picker: Project selection (owner required)\n- branch_picker: Branch selection (owner, repo required)\n- tag_picker: Tag selection (owner, repo required)\n- release_picker: Release selection (owner, repo required)\n- discussion_picker: Discussion selection (owner, repo required)\n- workflow_picker: GitHub Actions workflow selection (owner, repo required)\n- issue_type_picker: Issue type selection (owner/org required)\n- team_picker: Team selection (owner/org required)\n- org_picker: Organization search\n\n### Layout\n- section: Group components with a title (title, components[])\n- info: Display banner (message, variant: default/warning/danger/success)\n- divider: Visual separator\n\n### Actions\n- submit: Button that executes an action (label, action, params, or next for multi-stage)\n\n## Bindings\nUse {{variable.property}} to reference values from previous components.\nCommon bindings: {{repo.owner}}, {{repo.name}}, {{issue.number}}, {{user.login}}\n\n## Example: Add Issue to Project\n{\n  \"title\": \"Add Issue to Project\",\n  \"components\": [\n    {\"type\": \"repo_picker\", \"id\": \"repo\", \"label\": \"Repository\"},\n    {\"type\": \"issue_picker\", \"id\": \"issue\", \"label\": \"Issue\", \"owner\": \"{{repo.owner}}\", \"repo\": \"{{repo.name}}\"},\n    {\"type\": \"project_picker\", \"id\": \"project\", \"label\": \"Project\", \"owner\": \"{{repo.owner}}\"},\n    {\"type\": \"submit\", \"label\": \"Add to Project\", \"action\": \"add_project_item\", \"params\": {\"project_id\": \"{{project.id}}\", \"content_id\": \"{{issue.id}}\"}}\n  ]\n}\n\n## Example: Create Release\n{\n  \"title\": \"Create Release\",\n  \"components\": [\n    {\"type\": \"repo_picker\", \"id\": \"repo\", \"label\": \"Repository\"},\n    {\"type\": \"branch_picker\", \"id\": \"branch\", \"label\": \"Target Branch\", \"owner\": \"{{repo.owner}}\", \"repo\": \"{{repo.name}}\"},\n    {\"type\": \"text\", \"id\": \"tag\", \"label\": \"Tag Name\", \"placeholder\": \"v1.0.0\"},\n    {\"type\": \"text\", \"id\": \"name\", \"label\": \"Release Name\"},\n    {\"type\": \"textarea\", \"id\": \"body\", \"label\": \"Release Notes\", \"rows\": 6},\n    {\"type\": \"submit\", \"label\": \"Create Release\", \"action\": \"create_release\", \"params\": {\"owner\": \"{{repo.owner}}\", \"repo\": \"{{repo.name}}\", \"tag_name\": \"{{tag}}\", \"name\": \"{{name}}\", \"body\": \"{{body}}\", \"target_commitish\": \"{{branch.name}}\"}}\n  ]\n}\n\n## Multi-Stage Flows\nUse \"next\" on submit to proceed to the next stage:\n{\n  \"title\": \"Multi-Stage Example\",\n  \"stages\": [\n    {\n      \"id\": \"step1\",\n      \"components\": [\n        {\"type\": \"repo_picker\", \"id\": \"repo\", \"label\": \"Select Repository\"},\n        {\"type\": \"submit\", \"label\": \"Next\", \"next\": \"step2\"}\n      ]\n    },\n    {\n      \"id\": \"step2\", \n      \"components\": [\n        {\"type\": \"issue_picker\", \"id\": \"issue\", \"label\": \"Select Issue\", \"owner\": \"{{repo.owner}}\", \"repo\": \"{{repo.name}}\"},\n        {\"type\": \"submit\", \"label\": \"Create\", \"action\": \"issue_write\", \"params\": {...}}\n      ]\n    }\n  ]\n}",
+  "inputSchema": {
+    "properties": {
+      "components": {
+        "description": "Array of component definitions for a single-stage UI",
+        "items": {
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "stages": {
+        "description": "Array of stage definitions for multi-stage flows",
+        "items": {
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "title": {
+        "description": "Title displayed at the top of the UI",
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "type": "object"
+  },
+  "name": "compose_ui"
+}
